@@ -4,12 +4,21 @@ import javax.mail.Session;
 import javax.mail.Store;
 import java.util.Properties;
 //import javax.activation.Datahandler;
-import javax.mail.*;
+import javax.mail.internet.MimeMessage;
 
 //you need to pull in the following
 //javax.mail
 //javax.activation.datahandler
 
+//MIME stands for multipurpose internet mail extension
+
+/*
+FetchMail - Looking at text/html. maybe we can use that to directly get the data and store?
+Rich is looking to get a json file
+Can expand FetchEmail to look for images as well
+MailContent - need to think of how to store $ per item basis
+MailContent - need to think about how to use fetchemail's checkcontent to store to store the data
+ */
 
 public class Main {
 
@@ -24,48 +33,13 @@ public class Main {
         mail_properties.put("mail.imaps.host", "imap.gmail.com"); //gmail
         mail_properties.put("mail.imaps.port", "993"); //secure port for imaps
 
+        //instantiate new fetchemail class object
+        FetchEmail fetcher = new FetchEmail();
 
-        try {
-//            //create a session for store
-            Session mail_session = Session.getDefaultInstance(mail_properties, null);
-            Store mail_store = mail_session.getStore("imaps");
+        fetcher.fetch(mail_properties, email, password, emailsToRead);
 
-            System.out.println("Attempting to connect to email");
-            //try connecting to google imaps
-            mail_store.connect(email, password);
-            System.out.println("Successfully connected.");
-
-            //get the folder you want to read from
-            Folder inbox = mail_store.getFolder("inbox");
-            //open the inbox folder so we can read the messages
-            inbox.open(Folder.READ_WRITE);
-
-            //number of emails
-            int numEmails = inbox.getMessageCount();
-            System.out.println("You have " + numEmails + " total emails");
-
-            emailsToRead = numEmails;
-
-
-//            for (int i = emailsToRead; i > 0; i--) {
-//                System.out.println(inbox.getMessage(numEmails).getSubject());
-//            System.out.println(inbox.getMessage(1).getSubject());
-//           }
-
-            System.out.println(inbox.getMessage(1));
-        }
-
-
-
-        catch (Exception error) {
-            System.out.println("ERROR, MAN");
-            error.printStackTrace();
-        }
-
-
-
-//        System.out.println(mail_properties);
     }
+
 
 
 
