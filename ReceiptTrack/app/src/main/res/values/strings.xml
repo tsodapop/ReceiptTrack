@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">ReceiptTrack</string>
     <string name="receipt_track">Receipt Track</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="receipts">Receipts</string>
+    <string name="login">Log In</string>
+    <string name="exit">Exit</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>

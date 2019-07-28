@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ReceiptTrack="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_home"
+        android:enabled="true"
+        android:title="@string/home"
+        ReceiptTrack:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_receipts"
+        android:enabled="true"
+        android:title="@string/receipts"
+        ReceiptTrack:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:title="@string/settings"
+        ReceiptTrack:showAsAction="ifRoom" />
+</menu>
