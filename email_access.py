@@ -43,7 +43,10 @@ def get_credentials():
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)  
-    return creds       
+    return creds   
+
+# ----------------------------------------------------------------------------------------------------------------------------- #
+
 
 ##########################################################################################
 ##########################################################################################
@@ -61,25 +64,30 @@ def main():
     print("number of inbox messages:",len(inbox_messages))
 
     message_list = []
-    # for inbox_message in inbox_messages:
-    #     message_id = inbox_message['id'] #get the id of the message of interest
-    #     message = service.users().messages().get(userId='me', id=message_id).execute() #get the message
-    #     message_list.append(message)
+    for inbox_message in inbox_messages:
+        message_id = inbox_message['id'] #get the id of the message of interest
+        message = service.users().messages().get(userId='me', id=message_id).execute() #get the message
+        message_list.append(message)
 
-    message_id = inbox_messages[0]['id'] #get the id of the message of interest
-    message = service.users().messages().get(userId='me', id=message_id, format="full").execute() #get the message
-    message_list.append(message)    
+    # message_id = inbox_messages[0]['id'] #get the id of the message of interest
+    # message = service.users().messages().get(userId='me', id=message_id, format="full").execute() #get the message
+    # message_list.append(message)    
 
-    # print(message)
-    # print(message_list[0])
-    for i in message_list:
-        print(i['payload']['headers']['name' == "Subject"]['value'])
-        # print(i['payload']['headers']['name'])
+    
+    subjects = [] #store the email titles
 
-        for j in i['payload']['headers']:
-            # if j['name'] == 'Subject':
-            print("\n", j['value'])
+    for i in message_list: #for every message
+        headers = i['payload']['headers']
 
+        for names in headers: #loop through all headers
+            if names['name'] == 'Subject': #if they are the subject title, get the title
+                title = names['value']
+                
+        subjects.append(title) #add title to the subjects list
+    
+
+    for i in subjects:
+        print(i)
         
 
     #we've gotten to the actual list of emails, now we just need to get the email headers and contents
