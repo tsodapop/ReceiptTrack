@@ -6,6 +6,8 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import pandas as pd
+import os
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
@@ -46,13 +48,23 @@ def get_credentials():
     return creds   
 
 # ----------------------------------------------------------------------------------------------------------------------------- #
-
+def getSubject(headers):
+    for header in headers:
+        if header['name'] == 'Subject':
+            return header['value']
+        else:
+            continue
 
 ##########################################################################################
 ##########################################################################################
 ##########################################################################################
 
 def main():
+
+#clear out the terminal for cleanliness
+    os.system('clear')
+
+
 #CREDENTIALS----------------------------------------------------------------------------------------------------------------------------- # 
     creds = get_credentials()
 #CONNECTION----------------------------------------------------------------------------------------------------------------------------- # 
@@ -61,7 +73,7 @@ def main():
 #GET INBOX MESSAGES--------------------------------------------------------------------------------------------------------------------- # 
 
     inbox_messages = get_inbox_messages(service,'me') #all the messages in inbox
-    print("number of inbox messages:",len(inbox_messages))
+    print(f"number of inbox messages: {len(inbox_messages)}")
 
     message_list = []
     for inbox_message in inbox_messages:
@@ -69,6 +81,7 @@ def main():
         message = service.users().messages().get(userId='me', id=message_id).execute() #get the message
         message_list.append(message)
 
+    #TESTING ON INDIVIDUAL EMAIL, ABOVE IS ALL EMAILS
     # message_id = inbox_messages[0]['id'] #get the id of the message of interest
     # message = service.users().messages().get(userId='me', id=message_id, format="full").execute() #get the message
     # message_list.append(message)    
@@ -79,18 +92,28 @@ def main():
     for i in message_list: #for every message
         headers = i['payload']['headers']
 
-        for names in headers: #loop through all headers
-            if names['name'] == 'Subject': #if they are the subject title, get the title
-                title = names['value']
-                
-        subjects.append(title) #add title to the subjects list
-    
+        subject = getSubject(headers) #function that will return the subject
 
-    for i in subjects:
-        print(i)
+        # for names in headers: #loop through all headers
+            # if names['name'] == 'Subject': #if they are the subject title, get the title
+                # title = names['value']
+                
+        subjects.append(subject) #add title to the subjects list
+    
+#SAVE SUBJECTS AS CSV TO MANUALLY CLASSIFY------------------------------------------------------------------------------------------------- #  
+    subjects_df = pd.DataFrame(columns = ['Subject','Receipt'])
+    subjects_df['Subject'] = subjects #put the subjects into the subjects column
+    subjects_df['Receipt'] = 0 #default the value to 0
+    subjects_df.to_csv(r'email_subjects.csv', index=False) #save the df as a csv
+
+    print("Done")
+    #now, we need to manually classify the emails
+
+
+    
         
 
-    #we've gotten to the actual list of emails, now we just need to get the email headers and contents
+    #we have email titles, need to classify on them now
 
 
 
